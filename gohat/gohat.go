@@ -24,16 +24,10 @@ func (gohat Gohat) exists(path string) bool {
 	return true
 }
 
-func (gohat Gohat) isSUIDEnabled() (enabled bool) {
+func (gohat Gohat) isSUIDEnabled(gohatPath string) (enabled bool) {
 	enabled = false
 
-	exePath, err := os.Executable()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	exeDirPath := filepath.Dir(exePath)
-	f, err := os.Open(exeDirPath + "/gohat")
+	f, err := os.Open(gohatPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,23 +45,15 @@ func (gohat Gohat) isSUIDEnabled() (enabled bool) {
 	return
 }
 
-func (gohat Gohat) setSUID() (errReturn error) {
-	exePath, err := os.Executable()
-	if err != nil {
-		errReturn = err
-		return
-	}
-
-	exeDirPath := filepath.Dir(exePath)
-
-	if err := os.Chown(exeDirPath+"/gohat", 0, 0); err != nil {
+func (gohat Gohat) setSUID(gohatPath string) (errReturn error) {
+	if err := os.Chown(gohatPath, 0, 0); err != nil {
 		fmt.Println("info:", "at the first launch, gohat needs sudo.")
 		errReturn = err
 		return
 	}
 
 	// if err := os.Chmod("gohat", os.FileMode ModeSetuid); err != nil {
-	if err := exec.Command("chmod", "u+s", exeDirPath+"/gohat").Run(); err != nil {
+	if err := exec.Command("chmod", "u+s", gohatPath).Run(); err != nil {
 		fmt.Println("info:", "at the first launch, gohat needs sudo.")
 		errReturn = err
 		return
@@ -109,16 +95,24 @@ func (gohat Gohat) execScriptAsSu(shPath string, args ...string) (err error) {
 }
 
 func (gohat Gohat) Start(shPath string, args []string) (err error) {
-	if !gohat.exists(shPath) {
-		err = errors.New(shPath + " not found.")
-		return
+	exePath, err := os.Executable()
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	enabled := gohat.isSUIDEnabled()
+	exeDirPath := filepath.Dir(exePath)
+	gohatPath := exeDirPath + "/gohat"
+
+	enabled := gohat.isSUIDEnabled(gohatPath)
 	if enabled {
+		if !gohat.exists(shPath) {
+			err = errors.New(shPath + " not found.")
+			return
+		}
+
 		err = gohat.execScriptAsSu("sh", shPath)
 	} else {
-		err = gohat.setSUID()
+		err = gohat.setSUID(gohatPath)
 	}
 
 	return
