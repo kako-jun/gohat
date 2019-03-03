@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 
-	"./gohat"
+	"github.com/kako-jun/gohat/gohat-core"
 )
 
 func parseArgs() (shPath string, commandArgs []string, err error) {
