@@ -1,4 +1,4 @@
-// gohat is ***
+// Package gohat is ***
 package gohat
 
 import (
