@@ -69,8 +69,8 @@ func (gohat Gohat) setSUID(gohatPath string) (errReturn error) {
 	return
 }
 
-func (gohat Gohat) execScriptAsSu(shPath string, args ...string) (err error) {
-	cmd := exec.Command(shPath, args...)
+func (gohat Gohat) execScriptAsSu(sh string, shPath string) (err error) {
+	cmd := exec.Command(sh, shPath)
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{}
 	cmd.SysProcAttr.Credential = &syscall.Credential{Uid: 0, Gid: 0}
@@ -101,7 +101,7 @@ func (gohat Gohat) execScriptAsSu(shPath string, args ...string) (err error) {
 	return
 }
 
-func (gohat Gohat) Start(shPath string, args []string) (err error) {
+func (gohat Gohat) start(shPath string) (err error) {
 	gohatPath, err := os.Executable()
 	if err != nil {
 		log.Fatal(err)
@@ -123,9 +123,9 @@ func (gohat Gohat) Start(shPath string, args []string) (err error) {
 }
 
 // Exec is ***
-func Exec(shPath string, args []string) (errReturn error) {
+func Exec(shPath string) (errReturn error) {
 	gohat := new(Gohat)
-	if err := gohat.Start(shPath, args); err != nil {
+	if err := gohat.start(shPath); err != nil {
 		fmt.Println("error:", err)
 		errReturn = errors.New("error")
 		return

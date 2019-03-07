@@ -9,7 +9,7 @@ import (
 	"github.com/kako-jun/gohat/gohat-core"
 )
 
-func parseArgs() (shPath string, commandArgs []string, err error) {
+func parseArgs() (shPath string, err error) {
 	flag.Parse()
 	args := flag.Args()
 
@@ -24,16 +24,12 @@ func parseArgs() (shPath string, commandArgs []string, err error) {
 		shPath = args[0]
 	}
 
-	if flag.NArg() >= 2 {
-		commandArgs = args[1:]
-	}
-
 	return
 }
 
 // entry point
 func main() {
-	shPath, args, err := parseArgs()
+	shPath, err := parseArgs()
 	if err != nil {
 		fmt.Println("error:", err)
 		fmt.Println("usage:")
@@ -41,5 +37,5 @@ func main() {
 		return
 	}
 
-	gohat.Exec(shPath, args)
+	gohat.Exec(shPath)
 }
