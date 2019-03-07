@@ -8,7 +8,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 	"syscall"
 )
@@ -48,13 +47,21 @@ func (gohat Gohat) isSUIDEnabled(gohatPath string) (enabled bool) {
 func (gohat Gohat) setSUID(gohatPath string) (errReturn error) {
 	if err := os.Chown(gohatPath, 0, 0); err != nil {
 		fmt.Println("info:", "at the first launch, gohat needs sudo.")
+		fmt.Println("")
+
+		if strings.Contains(gohatPath, " ") {
+			fmt.Println("  e.g. sudo \"" + gohatPath + "\"")
+		} else {
+			fmt.Println("  e.g. sudo " + gohatPath)
+		}
+
+		fmt.Println("")
 		errReturn = err
 		return
 	}
 
 	// if err := os.Chmod("gohat", os.FileMode ModeSetuid); err != nil {
 	if err := exec.Command("chmod", "u+s", gohatPath).Run(); err != nil {
-		fmt.Println("info:", "at the first launch, gohat needs sudo.")
 		errReturn = err
 		return
 	}
@@ -95,13 +102,10 @@ func (gohat Gohat) execScriptAsSu(shPath string, args ...string) (err error) {
 }
 
 func (gohat Gohat) Start(shPath string, args []string) (err error) {
-	exePath, err := os.Executable()
+	gohatPath, err := os.Executable()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	exeDirPath := filepath.Dir(exePath)
-	gohatPath := exeDirPath + "/gohat"
 
 	enabled := gohat.isSUIDEnabled(gohatPath)
 	if enabled {

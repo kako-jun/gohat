@@ -4,20 +4,30 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"os"
 
 	"github.com/kako-jun/gohat/gohat-core"
 )
 
 func parseArgs() (shPath string, commandArgs []string, err error) {
 	flag.Parse()
-	if flag.NArg() < 1 {
-		err = errors.New("invalid argument")
-		return
+	args := flag.Args()
+
+	if os.Getuid() != 0 {
+		if flag.NArg() < 1 {
+			err = errors.New("invalid argument")
+			return
+		}
 	}
 
-	args := flag.Args()
-	shPath = args[0]
-	commandArgs = args[1:]
+	if flag.NArg() >= 1 {
+		shPath = args[0]
+	}
+
+	if flag.NArg() >= 2 {
+		commandArgs = args[1:]
+	}
+
 	return
 }
 
