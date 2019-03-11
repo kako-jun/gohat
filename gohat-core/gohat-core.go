@@ -60,7 +60,7 @@ func (gohat Gohat) setSUID(gohatPath string) (errReturn error) {
 		return
 	}
 
-	fmt.Println("chown root:root gohatPath")
+	fmt.Println("chown root:root " + gohatPath)
 
 	// if err := os.Chmod("gohat", os.FileMode ModeSetuid); err != nil {
 	if err := exec.Command("chmod", "u+s", gohatPath).Run(); err != nil {
@@ -68,7 +68,7 @@ func (gohat Gohat) setSUID(gohatPath string) (errReturn error) {
 		return
 	}
 
-	fmt.Println("chmod u+s gohatPath")
+	fmt.Println("chmod u+s " + gohatPath)
 	return
 }
 
