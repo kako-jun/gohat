@@ -9,9 +9,22 @@ import (
 	"github.com/kako-jun/gohat/gohat-core"
 )
 
+var Version string = "1.0.0"
+
 func parseArgs() (shPath string, err error) {
+	var (
+		versionFlag bool
+	)
+
+	flag.BoolVar(&versionFlag, "version", false, "print version number")
+
 	flag.Parse()
 	args := flag.Args()
+
+	if versionFlag {
+		fmt.Println(Version)
+		os.Exit(0)
+	}
 
 	if os.Getuid() != 0 {
 		if flag.NArg() < 1 {
