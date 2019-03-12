@@ -227,7 +227,7 @@ kako-jun
 
 This project is licensed under the MIT License.
 
-See the [LICENSE](https://github.com/kako-jun/cdand/blob/master/LICENSE) file for details.
+See the [LICENSE](https://github.com/kako-jun/gohat/blob/master/LICENSE) file for details.
 
 ## Acknowledgments
 
