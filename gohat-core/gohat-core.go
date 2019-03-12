@@ -130,6 +130,8 @@ func (gohat Gohat) start(scriptPath string) (err error) {
 			command = "ruby"
 		case ".py":
 			command = "python"
+		case ".pl":
+			command = "perl"
 		default:
 			command = "sh"
 		}
