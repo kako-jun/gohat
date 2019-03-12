@@ -8,6 +8,8 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"syscall"
 )
@@ -60,7 +62,11 @@ func (gohat Gohat) setSUID(gohatPath string) (errReturn error) {
 		return
 	}
 
-	fmt.Println("chown root:root " + gohatPath)
+	if runtime.GOOS == "darwin" {
+		fmt.Println("chown root:wheel " + gohatPath)
+	} else {
+		fmt.Println("chown root:root " + gohatPath)
+	}
 
 	// if err := os.Chmod("gohat", os.FileMode ModeSetuid); err != nil {
 	if err := exec.Command("chmod", "u+s", gohatPath).Run(); err != nil {
@@ -72,8 +78,8 @@ func (gohat Gohat) setSUID(gohatPath string) (errReturn error) {
 	return
 }
 
-func (gohat Gohat) execScriptAsSu(sh string, shPath string) (err error) {
-	cmd := exec.Command(sh, shPath)
+func (gohat Gohat) execScriptAsSu(command string, scriptPath string) (err error) {
+	cmd := exec.Command(command, scriptPath)
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{}
 	cmd.SysProcAttr.Credential = &syscall.Credential{Uid: 0, Gid: 0}
@@ -104,7 +110,7 @@ func (gohat Gohat) execScriptAsSu(sh string, shPath string) (err error) {
 	return
 }
 
-func (gohat Gohat) start(shPath string) (err error) {
+func (gohat Gohat) start(scriptPath string) (err error) {
 	gohatPath, err := os.Executable()
 	if err != nil {
 		log.Fatal(err)
@@ -112,12 +118,23 @@ func (gohat Gohat) start(shPath string) (err error) {
 
 	enabled := gohat.isSUIDEnabled(gohatPath)
 	if enabled {
-		if !gohat.exists(shPath) {
-			err = errors.New(shPath + " not found.")
+		if !gohat.exists(scriptPath) {
+			err = errors.New(scriptPath + " not found.")
 			return
 		}
 
-		err = gohat.execScriptAsSu("sh", shPath)
+		command := ""
+		ext := filepath.Ext(scriptPath)
+		switch ext {
+		case ".rb":
+			command = "ruby"
+		case ".py":
+			command = "python"
+		default:
+			command = "sh"
+		}
+
+		err = gohat.execScriptAsSu(command, scriptPath)
 	} else {
 		err = gohat.setSUID(gohatPath)
 	}
@@ -126,9 +143,9 @@ func (gohat Gohat) start(shPath string) (err error) {
 }
 
 // Exec is ***
-func Exec(shPath string) (errReturn error) {
+func Exec(scriptPath string) (errReturn error) {
 	gohat := new(Gohat)
-	if err := gohat.start(shPath); err != nil {
+	if err := gohat.start(scriptPath); err != nil {
 		fmt.Println("error:", err)
 		errReturn = errors.New("error")
 		return

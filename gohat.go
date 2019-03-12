@@ -11,7 +11,7 @@ import (
 
 var Version string = "1.0.0"
 
-func parseArgs() (shPath string, err error) {
+func parseArgs() (scriptPath string, err error) {
 	var (
 		versionFlag bool
 	)
@@ -34,7 +34,7 @@ func parseArgs() (shPath string, err error) {
 	}
 
 	if flag.NArg() >= 1 {
-		shPath = args[0]
+		scriptPath = args[0]
 	}
 
 	return
@@ -42,13 +42,13 @@ func parseArgs() (shPath string, err error) {
 
 // entry point
 func main() {
-	shPath, err := parseArgs()
+	scriptPath, err := parseArgs()
 	if err != nil {
 		fmt.Println("error:", err)
 		fmt.Println("usage:")
-		fmt.Println("  gohat [.sh path]")
+		fmt.Println("  gohat [.sh/.rb/.py path]")
 		return
 	}
 
-	gohat.Exec(shPath)
+	gohat.Exec(scriptPath)
 }
