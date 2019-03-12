@@ -109,8 +109,8 @@ $ gohat lightyear.pl
 処理の中身は、以下を実行しているのと同じです
 
 ```sh
-chmod u+x gohat
 chown root:root gohat
+chmod u+s gohat
 ```
 
 　
