@@ -6,7 +6,7 @@
 
 `gohat` は、危険でシンプルなコマンドラインツールです
 
-gohat（御法度）は、日本語で「絶対やっちゃダメ」という意味です
+gohat（御法度）は、「絶対やっちゃダメ」という意味の日本語です
 
 引数で与えたスクリプトファイル（`.sh`、`.rb`、`.py` など）を、パスワードを入力することなく、root権限で実行します
 
@@ -136,10 +136,10 @@ Chromebookの[Crouton](https://github.com/dnschneid/crouton)では、SDカード
 そのままでは、SDカードにリポジトリを置くのに不便なので、
 
 ```sh
-mount -o remount,noexec,nosuid /media/removable/SD Card
+mount -o remount,exec,suid /media/removable/SD\ Card
 ```
 
-で解除したいのですが、`mount` はroot権限が必要なコマンドです
+で解除したいのですが、`mount -o` はroot権限が必要なコマンドです
 
 また、スリープすると `noexec`、`nosuid` が復活するので、毎回解除しなくてはいけません
 
@@ -150,7 +150,7 @@ mount -o remount,noexec,nosuid /media/removable/SD Card
 このような場合は
 
 ```sh
-mount -o remount,noexec,nosuid /media/removable/SD Card
+mount -o remount,exec,suid /media/removable/SD\ Card
 ```
 
 という内容で `remount.sh` を作り、`.bashrc` などの末尾で
