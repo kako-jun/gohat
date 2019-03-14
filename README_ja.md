@@ -63,12 +63,12 @@ root権限が必要なコマンドは多くあります
 
 ### Download binaries
 
-- macOS: [gohat.dmg](https://github.com/kako-jun/gohat/raw/master/bin/mac/gohat.dmg)
+- macOS: [gohat_mac.dmg](https://github.com/kako-jun/gohat/releases/latest)
 - Linux ( `chmod u+x gohat` required)
 
-    - x64: [gohat_amd64.tar.gz](https://github.com/kako-jun/gohat/raw/master/bin/linux/gohat_amd64.tar.gz)
-    - ARM: [gohat_arm64.tar.gz](https://github.com/kako-jun/gohat/raw/master/bin/linux/gohat_arm64.tar.gz)
-    - Raspberry Pi: [gohat_armv7l.tar.gz](https://github.com/kako-jun/gohat/raw/master/bin/linux/gohat_armv7l.tar.gz)
+    - x64: [gohat_linux_amd64.tar.gz](https://github.com/kako-jun/gohat/releases/latest)
+    - ARM: [gohat_linux_arm64.tar.gz](https://github.com/kako-jun/gohat/releases/latest)
+    - Raspberry Pi: [gohat_linux_armv7l.tar.gz](https://github.com/kako-jun/gohat/releases/latest)
 
 ### go get
 
