@@ -9,6 +9,7 @@ import (
 	"github.com/kako-jun/gohat/gohat-core"
 )
 
+// app version
 var Version string = "1.0.0"
 
 func parseArgs() (scriptPath string, err error) {
